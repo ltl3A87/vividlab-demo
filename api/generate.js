@@ -20,22 +20,27 @@ export default async function handler(req, res) {
   if (!process.env.BLOB_READ_WRITE_TOKEN) return res.status(503).json({ error: "Blob storage is not configured" });
 
   try {
-    const { prompt, imageDataUrl, ratio = "9:16", duration = 15 } = req.body || {};
+    const { prompt, imageDataUrl, imageDataUrls, ratio = "9:16", duration = 15 } = req.body || {};
     if (typeof prompt !== "string" || prompt.trim().length < 10 || prompt.length > 5000) {
       return res.status(400).json({ error: "Prompt must be 10-5000 characters" });
     }
-    const match = /^data:(image\/(?:jpeg|png|webp));base64,([A-Za-z0-9+/=]+)$/.exec(imageDataUrl || "");
-    if (!match) return res.status(400).json({ error: "A JPEG, PNG, or WebP reference image is required" });
-    const bytes = Buffer.from(match[2], "base64");
-    if (!bytes.length || bytes.length > 4 * 1024 * 1024) return res.status(413).json({ error: "Image must be smaller than 4 MB" });
+    const inputs = (Array.isArray(imageDataUrls) ? imageDataUrls : [imageDataUrl]).filter(Boolean).slice(0, 4);
+    if (!inputs.length) return res.status(400).json({ error: "At least one reference image is required" });
     const safeRatio = ["9:16", "16:9", "1:1"].includes(ratio) ? ratio : "9:16";
     const safeDuration = Math.min(15, Math.max(4, Number(duration) || 15));
-    const ext = match[1].split("/")[1].replace("jpeg", "jpg");
-    const blob = await put("references/" + crypto.randomUUID() + "." + ext, bytes, {
-      access: "public",
-      contentType: match[1],
-      addRandomSuffix: true
-    });
+    const blobs = [];
+    for (const input of inputs) {
+      const match = /^data:(image\/(?:jpeg|png|webp));base64,([A-Za-z0-9+/=]+)$/.exec(input);
+      if (!match) return res.status(400).json({ error: "References must be JPEG, PNG, or WebP images" });
+      const bytes = Buffer.from(match[2], "base64");
+      if (!bytes.length || bytes.length > 4 * 1024 * 1024) return res.status(413).json({ error: "Each image must be smaller than 4 MB" });
+      const ext = match[1].split("/")[1].replace("jpeg", "jpg");
+      blobs.push(await put("references/" + crypto.randomUUID() + "." + ext, bytes, {
+        access: "public",
+        contentType: match[1],
+        addRandomSuffix: true
+      }));
+    }
 
     const arkResponse = await fetch(ARK_URL, {
       method: "POST",
@@ -47,7 +52,7 @@ export default async function handler(req, res) {
         model: MODEL,
         content: [
           { type: "text", text: prompt.trim() },
-          { type: "image_url", image_url: { url: blob.url }, role: "reference_image" }
+          ...blobs.map(blob => ({ type: "image_url", image_url: { url: blob.url }, role: "reference_image" }))
         ],
         generate_audio: true,
         ratio: safeRatio,
