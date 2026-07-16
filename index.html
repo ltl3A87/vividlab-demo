@@ -237,7 +237,10 @@
   let assets = [];
   let feedback = [];
   const saved = JSON.parse(localStorage.getItem('vividlab-prompts') || 'null');
-  if (saved) spaces.forEach((space, index) => { if (saved[index]) space.prompt = saved[index]; });
+  const previousDefault = '一支适合抖音信息流的 9:16 商品短片。前三秒用近距离动态镜头建立吸引力，保持商品包装、文字和颜色准确。镜头自然、有真实手持感，结尾留出行动号召空间。';
+  if (saved) spaces.forEach((space, index) => {
+    if (saved[index] && !(index === 0 && saved[index] === previousDefault)) space.prompt = saved[index];
+  });
 
   function toast(message) {
     let el = one('.vivid-toast');
