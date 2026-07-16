@@ -1,35 +1,523 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>VividLab — AI 视频创作工作台</title><meta name="description" content="用 Reference、Prompt 模板与多模型快速生成并迭代定制视频。"/><meta property="og:title" content="VividLab — AI 视频创作工作台"/><meta property="og:description" content="从 Reference 到成片，一站完成。"/><meta property="og:image" content="http://localhost:3000/og.png"/><meta property="og:image:width" content="1200"/><meta property="og:image:height" content="630"/><meta property="og:image:alt" content="VividLab AI 视频创作工作台"/><meta name="twitter:card" content="summary_large_image"/><meta name="twitter:title" content="VividLab — AI 视频创作工作台"/><meta name="twitter:description" content="从 Reference 到成片，一站完成。"/><meta name="twitter:image" content="http://localhost:3000/og.png"/><link rel="shortcut icon" href="/favicon.svg"/><link rel="icon" href="/favicon.svg"/><style>@layer theme{:root,:host{--font-sans:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";--font-mono:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;--spacing:.25rem;--default-font-family:var(--font-sans);--default-mono-font-family:var(--font-mono)}}@layer base{*,:after,:before,::backdrop{box-sizing:border-box;border:0 solid;margin:0;padding:0}::file-selector-button{box-sizing:border-box;border:0 solid;margin:0;padding:0}html,:host{-webkit-text-size-adjust:100%;tab-size:4;line-height:1.5;font-family:var(--default-font-family,ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji");font-feature-settings:var(--default-font-feature-settings,normal);font-variation-settings:var(--default-font-variation-settings,normal);-webkit-tap-highlight-color:transparent}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;-webkit-text-decoration:inherit;-webkit-text-decoration:inherit;-webkit-text-decoration:inherit;-webkit-text-decoration:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,samp,pre{font-family:var(--default-mono-font-family,ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace);font-feature-settings:var(--default-mono-font-feature-settings,normal);font-variation-settings:var(--default-mono-font-variation-settings,normal);font-size:1em}small{font-size:80%}sub,sup{vertical-align:baseline;font-size:75%;line-height:0;position:relative}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}:-moz-focusring{outline:auto}progress{vertical-align:baseline}summary{display:list-item}ol,ul,menu{list-style:none}img,svg,video,canvas,audio,iframe,embed,object{vertical-align:middle;display:block}img,video{max-width:100%;height:auto}button,input,select,optgroup,textarea{font:inherit;font-feature-settings:inherit;font-variation-settings:inherit;letter-spacing:inherit;color:inherit;opacity:1;background-color:#0000;border-radius:0}::file-selector-button{font:inherit;font-feature-settings:inherit;font-variation-settings:inherit;letter-spacing:inherit;color:inherit;opacity:1;background-color:#0000;border-radius:0}:where(select:is([multiple],[size])) optgroup{font-weight:bolder}:where(select:is([multiple],[size])) optgroup option{padding-inline-start:20px}::file-selector-button{margin-inline-end:4px}::placeholder{opacity:1}@supports (not ((-webkit-appearance:-apple-pay-button))) or (contain-intrinsic-size:1px){::placeholder{color:currentColor}@supports (color:color-mix(in lab, red, red)){::placeholder{color:color-mix(in oklab, currentcolor 50%, transparent)}}}textarea{resize:vertical}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-date-and-time-value{min-height:1lh;text-align:inherit}::-webkit-datetime-edit{display:inline-flex}::-webkit-datetime-edit-fields-wrapper{padding:0}::-webkit-datetime-edit{padding-block:0}::-webkit-datetime-edit-year-field{padding-block:0}::-webkit-datetime-edit-month-field{padding-block:0}::-webkit-datetime-edit-day-field{padding-block:0}::-webkit-datetime-edit-hour-field{padding-block:0}::-webkit-datetime-edit-minute-field{padding-block:0}::-webkit-datetime-edit-second-field{padding-block:0}::-webkit-datetime-edit-millisecond-field{padding-block:0}::-webkit-datetime-edit-meridiem-field{padding-block:0}::-webkit-calendar-picker-indicator{line-height:1}:-moz-ui-invalid{box-shadow:none}button,input:where([type=button],[type=reset],[type=submit]){appearance:button}::file-selector-button{appearance:button}::-webkit-inner-spin-button{height:auto}::-webkit-outer-spin-button{height:auto}[hidden]:where(:not([hidden=until-found])){display:none!important}}@layer components;@layer utilities{.relative{position:relative}.start{inset-inline-start:var(--spacing)}.table{display:table}}:root{--ink:#171818;--muted:#777974;--line:#e7e8e3;--paper:#f6f6f2;--card:#fff}*{box-sizing:border-box}html,body{background:var(--paper);min-height:100%;color:var(--ink);margin:0}body{font-family:Arial,PingFang SC,Microsoft YaHei,sans-serif}button,input,textarea,select{font:inherit}button{color:inherit}.app-shell{background:#f7f7f3;min-height:100vh;display:flex}.sidebar{color:#f6f7f3;z-index:5;background:#191b1a;flex-direction:column;width:244px;padding:22px 14px 14px;display:flex;position:fixed;inset:0 auto 0 0}.brand{letter-spacing:-.3px;align-items:center;gap:10px;padding:0 8px 22px;font-size:18px;font-weight:750;display:flex}.brand-mark{color:#171818;background:#c8ff59;border-radius:8px;place-items:center;width:28px;height:28px;font-size:15px;font-weight:900;display:grid;transform:rotate(-4deg)}.brand em{color:#9ea19c;text-transform:uppercase;letter-spacing:1px;border:1px solid #424541;border-radius:5px;padding:3px 6px;font-size:8px;font-style:normal}.new-project{color:#151714;cursor:pointer;background:#c8ff59;border:0;border-radius:9px;justify-content:center;align-items:center;gap:8px;width:100%;padding:11px;font-weight:750;display:flex}.new-project span{font-size:20px;font-weight:400;line-height:14px}.side-label{color:#70736f;letter-spacing:1.4px;text-transform:uppercase;padding:25px 10px 9px;font-size:10px;font-weight:700}.workspace-list{flex-direction:column;gap:3px;display:flex}.workspace{color:#b8bbb5;text-align:left;cursor:pointer;background:0 0;border:0;border-radius:9px;grid-template-columns:32px 1fr;gap:8px;width:100%;padding:10px 9px;display:grid;position:relative}.workspace:hover{background:#232624}.workspace.active{color:#fff;background:#2a2d2a}.workspace-icon{background:#353834;border-radius:7px;place-items:center;width:28px;height:28px;font-weight:900;display:grid}.workspace strong,.workspace small{display:block}.workspace strong{margin:1px 0 4px;font-size:12px}.workspace small{color:#777b75;font-size:9px}.workspace.active small{color:#9b9f98}.workspace i{background:var(--accent);border-radius:2px;width:2px;height:20px;position:absolute;top:15px;right:0}.library-label{padding-top:22px}.plain-nav{color:#a9aca6;text-align:left;cursor:pointer;background:0 0;border:0;align-items:center;gap:10px;width:100%;padding:9px 11px;font-size:11px;display:flex}.plain-nav span{color:#70736f;width:16px;font-size:15px}.plain-nav b{color:#858983;background:#2b2e2b;border-radius:8px;margin-left:auto;padding:2px 6px;font-size:8px}.sidebar-bottom{margin-top:auto}.credits{color:#9b9e98;border:1px solid #323532;border-radius:10px;margin:0 6px 14px;padding:12px;font-size:9px}.credits strong{float:right;color:#cdd0ca}.credits>div{background:#353835;border-radius:3px;height:3px;margin:10px 0 7px;overflow:hidden}.credits>div i{background:#c8ff59;width:68%;height:100%;display:block}.credits small{color:#686b67}.profile{color:#e8eae5;text-align:left;background:0 0;border:0;border-top:1px solid #2d302d;grid-template-columns:32px 1fr auto;align-items:center;gap:9px;width:100%;padding:10px 8px;display:grid}.profile>span:first-child{background:#383b37;border-radius:50%;place-items:center;width:30px;height:30px;font-size:9px;display:grid}.profile strong,.profile small{display:block}.profile strong{margin-bottom:3px;font-size:10px}.profile small{color:#6f726d;font-size:8px}.profile b{color:#60635f;font-size:9px}.workspace-main{width:calc(100% - 244px);margin-left:244px}.topbar{border-bottom:1px solid var(--line);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);z-index:4;background:#ffffffd1;justify-content:space-between;align-items:center;height:66px;padding:0 26px;display:flex;position:sticky;top:0}.topbar>div:first-child{font-size:12px}.crumb{color:#9a9c97}.draft{color:#8a8d87;background:#eeefeb;border-radius:5px;margin-left:9px;padding:3px 7px;font-size:8px}.top-actions{gap:8px;display:flex}.top-actions button{cursor:pointer;background:#fff;border:1px solid #dedfd9;border-radius:7px;padding:8px 14px;font-size:10px}.top-actions .save{color:#fff;background:#1e201f;border-color:#1e201f;min-width:83px}.studio-grid{grid-template-columns:minmax(580px,1fr) 390px;max-width:1260px;min-height:calc(100vh - 66px);margin:0 auto;display:grid}.composer{border-right:1px solid var(--line);background:#fff;padding:30px 36px 70px}.section-heading{justify-content:space-between;align-items:flex-end;margin-bottom:14px;display:flex}.section-heading>div{align-items:center;gap:10px;display:flex}.section-heading span{color:#777a74;background:#f0f1ed;border-radius:50%;place-items:center;width:22px;height:22px;font-size:8px;font-weight:800;display:grid}.section-heading h2{letter-spacing:-.15px;margin:0;font-size:14px}.section-heading p{color:#a1a39e;margin:0;font-size:9px}.asset-row{gap:10px;min-height:107px;display:flex}.asset-card,.upload-card{border-radius:9px;width:132px;height:104px;position:relative;overflow:hidden}.asset-card{background:#e8e9e4}.asset-card img{object-fit:cover;width:100%;height:100%}.video-placeholder{color:#fff;background:linear-gradient(145deg,#333,#aaa);place-items:center;height:100%;display:grid}.asset-card>span{color:#fff;background:#0f100fb3;border-radius:5px;padding:3px 6px;font-size:8px;position:absolute;bottom:7px;left:7px}.asset-card>button{color:#fff;cursor:pointer;background:#00000080;border:0;border-radius:50%;place-items:center;width:19px;height:19px;display:grid;position:absolute;top:6px;right:6px}.upload-card{color:#91938d;cursor:pointer;background:#fafaf8;border:1px dashed #d4d6cf;flex-direction:column;justify-content:center;align-items:center;display:flex}.upload-card:hover{border-color:var(--accent);background:#fff}.upload-card input{display:none}.upload-card b{color:#7d807a;font-size:21px;font-weight:300}.upload-card strong{color:#5e615c;margin:5px 0 4px;font-size:9px}.upload-card small{font-size:7px}.prompt-heading{margin-top:30px}.history-btn{color:#777a74;cursor:pointer;background:0 0;border:0;font-size:9px}.template-bar{border:1px solid var(--line);background:#f8f8f5;border-bottom:0;border-radius:9px 9px 0 0;align-items:center;height:42px;padding:0 11px;display:flex}.template-bar label{color:#8d8f89;font-size:9px}.template-bar select{color:#292b29;background:0 0;border:0;outline:0;margin-left:10px;font-size:10px;font-weight:700}.template-bar>span{color:#949690;background:#ebece7;border-radius:4px;margin-left:7px;padding:2px 5px;font-size:7px}.template-bar button{color:#71746e;cursor:pointer;background:0 0;border:0;margin-left:auto;font-size:8px}.prompt-editor{border:1px solid var(--line);background:#fff;border-radius:0 0 9px 9px}.prompt-tabs{border-bottom:1px solid #eff0ec;align-items:center;height:35px;padding:0 11px;display:flex}.prompt-tabs button{color:#969993;cursor:pointer;background:0 0;border:0;border-bottom:2px solid #0000;height:100%;padding:0 10px;font-size:8px}.prompt-tabs button.active{border-color:var(--accent);color:#252724;font-weight:700}.prompt-tabs span{color:#9a9d96;background:0 0;width:auto;height:auto;margin-left:auto;font-size:7px}.prompt-editor textarea{resize:vertical;color:#343633;border:0;outline:0;width:100%;min-height:132px;padding:15px 17px;font-size:11px;line-height:1.9;display:block}.prompt-footer{color:#aaada6;border-top:1px solid #f0f1ed;justify-content:space-between;align-items:center;padding:7px 11px;font-size:8px;display:flex}.prompt-footer button{color:#667848;cursor:pointer;background:#f0f5e6;border:0;border-radius:5px;padding:5px 9px;font-size:8px;font-weight:700}.negative{border:1px solid var(--line);border-radius:8px;grid-template-columns:98px 1fr;align-items:center;gap:8px;margin-top:9px;padding:8px 11px;display:grid}.negative label{font-size:9px;font-weight:700}.negative label span{color:#a7aaa3;font-size:7px;font-weight:400}.negative input{color:#777a74;border:0;outline:0;width:100%;font-size:9px}.settings-heading{margin-top:28px}.settings{grid-template-columns:repeat(4,1fr);gap:8px;display:grid}.settings label{color:#8e918a;font-size:8px}.settings select{border:1px solid var(--line);color:#343633;background:#fff;border-radius:7px;outline:0;width:100%;margin-top:6px;padding:9px;font-size:9px;display:block}.generate{color:#fff;cursor:pointer;background:#1d1f1e;border:0;border-radius:9px;grid-template-columns:auto auto 1fr;justify-content:center;align-items:center;gap:7px;width:100%;margin-top:18px;padding:13px 16px;font-size:11px;font-weight:750;display:grid}.generate span{color:#c8ff59}.generate small{color:#8c9089;justify-self:end;font-size:8px;font-weight:400}.generate:disabled{opacity:.75;cursor:wait}.results-panel{background:#f7f7f3;padding:29px 25px}.results-head{justify-content:space-between;align-items:center;margin-bottom:14px;display:flex}.results-head>div{align-items:center;gap:8px;display:flex}.results-head h2{margin:0;font-size:14px}.results-head span{color:#858881;background:#e9eae5;border-radius:5px;padding:3px 6px;font-size:7px}.results-head button{color:#898c85;background:0 0;border:0}.preview-stage{background:#eeefeb;border:1px solid #e0e1dc;border-radius:11px;place-items:center;height:425px;display:grid;overflow:hidden}.empty-result,.generating{text-align:center;color:#8d9089;flex-direction:column;align-items:center;display:flex}.empty-result>div{color:#b1b3ad;background:#f7f7f4;border:1px solid #d3d5cf;border-radius:50%;place-items:center;width:49px;height:49px;margin-bottom:16px;font-size:12px;display:grid}.empty-result strong,.generating strong{color:#61645e;font-size:10px}.empty-result p,.generating p{color:#a0a39c;width:190px;margin:7px 0;font-size:8px;line-height:1.6}.spinner{border:2px solid #d7d9d2;border-top-color:var(--accent);border-radius:50%;width:38px;height:38px;margin-bottom:16px;animation:.8s linear infinite spin}.progress{background:#dddfd9;border-radius:4px;width:170px;height:3px;margin-top:13px;overflow:hidden}.progress i{background:var(--accent);width:65%;height:100%;animation:1.2s ease-in-out infinite pulse;display:block}.mock-video{background:radial-gradient(circle at 45% 32%,#ffd8a3 0 8%,#0000 25%),linear-gradient(155deg,#303c31 0 30%,#baa06e 55%,#1c2420 100%);width:100%;height:100%;position:relative}.scene-glow{opacity:.85;background:linear-gradient(145deg,#f8a83d,#e04725);border-radius:40% 40% 22% 22%;position:absolute;inset:18% 22%;box-shadow:0 20px 80px #0006}.play{color:#222;background:#ffffffe6;border-radius:50%;place-items:center;width:48px;height:48px;display:grid;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}.video-meta{color:#fff;text-shadow:0 1px 5px #000;justify-content:space-between;font-size:9px;display:flex;position:absolute;inset:auto 12px 12px}.tips,.feedback-box{background:#fff;border:1px solid #e5e6e0;border-radius:10px;margin-top:14px;padding:15px}.tips strong{font-size:9px}.tips strong span{color:#7a9d3a}.tips ul{color:#858881;margin:11px 0 0;padding-left:16px;font-size:8px;line-height:1.8}.feedback-box>div:first-child{justify-content:space-between;display:flex}.feedback-box strong{font-size:9px}.feedback-box>div:first-child span{color:#9b9e97;font-size:7px}.feedback-tags{flex-wrap:wrap;gap:5px;margin:11px 0;display:flex}.feedback-tags button{color:#73766f;cursor:pointer;background:#fafaf8;border:1px solid #e2e3de;border-radius:6px;padding:5px 7px;font-size:7px}.feedback-tags button.selected{border-color:var(--accent);color:#252724;background:#fff}.iterate{cursor:pointer;background:0 0;border:0;border-top:1px solid #ecede8;justify-content:space-between;width:100%;padding:8px 0 0;font-size:8px;font-weight:700;display:flex}.model-status{color:#8c8f88;justify-content:space-between;margin-top:14px;font-size:8px;display:flex}.model-status i{background:#f1ac45;border-radius:50%;width:6px;height:6px;margin-right:5px;display:inline-block}.model-status b{font-weight:500}@keyframes spin{to{transform:rotate(360deg)}}@keyframes pulse{50%{opacity:.5}}@media (max-width:1050px){.studio-grid{grid-template-columns:1fr}.results-panel{border-top:1px solid var(--line)}.preview-stage{height:360px}.composer{border-right:0}}@media (max-width:720px){.sidebar{width:74px;padding:18px 10px;position:static}.brand>span:not(.brand-mark),.brand em,.new-project:not(span),.side-label,.workspace span:not(.workspace-icon),.plain-nav:not(span),.sidebar-bottom{display:none}.brand{padding:0 12px 20px}.new-project{width:46px;height:42px;font-size:0}.new-project span{font-size:22px}.workspace{padding:8px;display:block}.workspace-icon{width:38px;height:38px}.workspace i{display:none}.workspace-main{width:calc(100% - 74px);margin-left:0}.topbar{padding:0 15px}.composer,.results-panel{padding:24px 18px 50px}.section-heading p{display:none}.asset-row{flex-wrap:wrap}.settings{grid-template-columns:1fr 1fr}.generate{grid-template-columns:auto 1fr}.generate small{grid-column:1/-1;justify-self:center}.studio-grid{min-width:0}}
-</style></head><body><div hidden=""><!--$--><!--/$--></div><main class="app-shell" style="--accent:#ff6b35"><aside class="sidebar"><div class="brand"><span class="brand-mark">V</span><span>VividLab</span><em>Beta</em></div><button class="new-project"><span>＋</span> 新建创作</button><div class="side-label">创作空间</div><nav class="workspace-list" aria-label="创作空间"><button class="workspace active"><span class="workspace-icon" style="color:#ff6b35">↗</span><span><strong>抖音带货</strong><small>商品展示 · 口播转化</small></span><i></i></button><button class="workspace"><span class="workspace-icon" style="color:#9875ff">●</span><span><strong>宠物日常</strong><small>角色一致 · 轻松叙事</small></span></button><button class="workspace"><span class="workspace-icon" style="color:#00a67e">✦</span><span><strong>创意实验室</strong><small>风格探索 · 多模型对比</small></span></button></nav><div class="side-label library-label">资产库</div><button class="plain-nav"><span>▧</span> Reference 素材 <b>0</b></button><button class="plain-nav"><span>≡</span> Prompt 模板 <b>12</b></button><button class="plain-nav"><span>◴</span> 生成历史</button><div class="sidebar-bottom"><div class="credits"><span>本月额度</span><strong>68%</strong><div><i></i></div><small>¥136 / ¥200</small></div><button class="profile"><span>MX</span><span><strong>我的工作台</strong><small>个人空间</small></span><b>•••</b></button></div></aside><section class="workspace-main"><header class="topbar"><div><span class="crumb">创作空间 / </span><strong>抖音带货</strong><span class="draft">草稿</span></div><div class="top-actions"><button>分享</button><button class="save">保存模板</button></div></header><div class="studio-grid"><section class="composer"><div class="section-heading"><div><span>01</span><h2>准备 Reference</h2></div><p>上传主体、商品或风格参考，最多 4 个素材</p></div><div class="asset-row"><label class="upload-card"><input type="file" accept="image/*,video/*" multiple=""/><b>＋</b><strong>添加素材</strong><small>图片或视频 · 单个 ≤ 50MB</small></label></div><div class="section-heading prompt-heading"><div><span>02</span><h2>编排 Prompt</h2></div><button class="history-btn">↺ 查看版本</button></div><div class="template-bar"><label>模板<select><option selected="">商品开箱 15s</option><option>痛点反转 10s</option><option>宠物微剧情</option><option>电影感奇观</option></select></label><span>v3</span><button>复制为新模板</button></div><div class="prompt-editor"><div class="prompt-tabs"><button class="active">自然语言</button><button>结构化</button><span>已针对 <!-- -->Seedance 2.0<!-- --> 优化</span></div><textarea aria-label="视频生成提示词">一支适合抖音信息流的 9:16 商品短片。前三秒用近距离动态镜头建立吸引力，保持商品包装、文字和颜色准确。镜头自然、有真实手持感，结尾留出行动号召空间。</textarea><div class="prompt-footer"><span>76<!-- --> 字</span><button>✦ AI 优化</button></div></div><div class="negative"><label>负面约束 <span>可选</span></label><input value="文字变形、水印、多余肢体、过度磨皮、画面闪烁"/></div><div class="section-heading settings-heading"><div><span>03</span><h2>生成设置</h2></div></div><div class="settings"><label>生成模型<select><option selected="">Seedance 2.0</option><option>Gemini Omni</option><option>Veo 3.1</option></select></label><label>画面比例<select><option>9:16 竖屏</option><option>16:9 横屏</option><option>1:1 方形</option></select></label><label>时长<select><option>10 秒</option><option>5 秒</option><option>15 秒</option></select></label><label>生成数量<select><option>2 个版本</option><option>1 个版本</option><option>4 个版本</option></select></label></div><button class="generate"><span>✦</span>生成 2 个视频版本<small>约 ¥3.20<!-- --> · 预计 2–4 分钟</small></button></section><aside class="results-panel"><div class="results-head"><div><h2>生成结果</h2><span>等待生成</span></div><button>•••</button></div><div class="preview-stage idle"><div class="empty-result"><div>▶</div><strong>你的作品会出现在这里</strong><p>配置左侧素材和 Prompt，开始第一次生成</p></div></div><div class="tips"><strong><span>✦</span> 本次创作建议</strong><ul><li>商品 reference 建议使用纯色背景、多角度照片</li><li>前三秒明确主体动作，更适合抖音信息流</li><li>生成后可标记问题，系统会形成新的模板版本</li></ul></div><div class="model-status"><span><i></i> API 接入状态</span><b>演示模式</b></div></aside></div></section></main><!--$--><!--/$--><script>
-(function(){
-const spaces=[
-{title:'抖音带货',accent:'#ff6b35',prompt:'一支适合抖音信息流的 9:16 商品短片。前三秒用近距离动态镜头建立吸引力，保持商品包装、文字和颜色准确。镜头自然、有真实手持感，结尾留出行动号召空间。',tip:'商品 reference 建议使用纯色背景、多角度照片'},
-{title:'宠物日常',accent:'#9875ff',prompt:'以 reference 中的宠物为唯一主角，完整保留毛色、脸部花纹、体型和眼睛颜色。日常手机随拍质感，动作自然可爱，光线柔和，不改变宠物身份特征。',tip:'准备正面、侧面和全身照片有助于保持宠物一致性'},
-{title:'创意实验室',accent:'#00a67e',prompt:'创作一段具有电影感的视觉短片，主体清晰，动作符合物理规律。使用富有表现力的镜头运动和层次丰富的环境声，避免廉价的特效感和无意义的快速切镜。',tip:'使用首尾帧和风格 reference 可以获得更稳定的创意结果'}
-];
-const one=(s,r=document)=>r.querySelector(s), all=(s,r=document)=>[...r.querySelectorAll(s)];
-let active=Number(localStorage.getItem('vividlab-space')||0), assets=[], feedback=[];
-const saved=JSON.parse(localStorage.getItem('vividlab-prompts')||'null'); if(saved) spaces.forEach((x,i)=>{if(saved[i])x.prompt=saved[i]});
-function toast(msg){let t=one('.vivid-toast');if(!t){t=document.createElement('div');t.className='vivid-toast';t.style.cssText='position:fixed;right:24px;bottom:24px;background:#191b1a;color:#fff;padding:11px 15px;border-radius:8px;font:12px Arial;z-index:99;box-shadow:0 10px 35px #0003';document.body.appendChild(t)}t.textContent=msg;t.style.display='block';clearTimeout(t._timer);t._timer=setTimeout(()=>t.style.display='none',1800)}
-function syncSpace(i){active=i;localStorage.setItem('vividlab-space',i);all('.workspace').forEach((b,n)=>b.classList.toggle('active',n===i));document.documentElement.style.setProperty('--accent',spaces[i].accent);one('.app-shell').style.setProperty('--accent',spaces[i].accent);one('.topbar strong').textContent=spaces[i].title;one('.prompt-editor textarea').value=spaces[i].prompt;one('.prompt-footer span').textContent=spaces[i].prompt.length+' 字';const lis=one('.tips li');if(lis[0])lis[0].textContent=spaces[i].tip;resetResult()}
-function resetResult(){const stage=one('.preview-stage');stage.className='preview-stage idle';stage.innerHTML='<div class="empty-result"><div>▶</div><strong>你的作品会出现在这里</strong><p>配置左侧素材和 Prompt，开始第一次生成</p></div>';const badge=one('.results-head span');badge.textContent='等待生成';const old=one('.feedback-box');if(old)old.remove()}
-all('.workspace').forEach((b,i)=>b.addEventListener('click',()=>syncSpace(i)));
-const input=one('.upload-card input'), row=one('.asset-row'), upload=one('.upload-card');
-function updateCount(){const b=all('.plain-nav b')[0];if(b)b.textContent=assets.length;upload.style.display=assets.length>=4?'none':'flex'}
-function addAsset(file){const url=URL.createObjectURL(file), item={file,url};assets.push(item);const card=document.createElement('div');card.className='asset-card';card.dataset.url=url;if(file.type.startsWith('image/')){const img=document.createElement('img');img.src=url;img.alt=file.name;card.appendChild(img)}else{const p=document.createElement('div');p.className='video-placeholder';p.textContent='▶';card.appendChild(p)}const tag=document.createElement('span');tag.textContent=assets.length===1?'主体':'参考';card.appendChild(tag);const del=document.createElement('button');del.type='button';del.textContent='×';del.setAttribute('aria-label','删除 '+file.name);del.onclick=()=>{URL.revokeObjectURL(url);assets=assets.filter(x=>x.url!==url);card.remove();updateCount();toast('素材已移除')};card.appendChild(del);row.insertBefore(card,upload)}
-input.addEventListener('change',e=>{const list=[...e.target.files].slice(0,4-assets.length);if(!list.length)return;list.forEach(addAsset);updateCount();input.value='';toast('已添加 '+list.length+' 个素材（仅保存在本机）')});
-const ta=one('.prompt-editor textarea');ta.addEventListener('input',()=>{spaces[active].prompt=ta.value;one('.prompt-footer span').textContent=ta.value.length+' 字'});
-const optimize=one('.prompt-footer button');optimize.addEventListener('click',()=>{const extra=active===0?' 镜头节奏：开场快速建立商品，中段稳定展示细节，结尾停留品牌信息。':active===1?' 保持同一只宠物身份一致，避免毛色、五官和体型漂移。':' 镜头运动由慢到快，确保每个视觉转折都有清晰动机。';if(!ta.value.includes(extra.trim()))ta.value+=extra;spaces[active].prompt=ta.value;one('.prompt-footer span').textContent=ta.value.length+' 字';toast('Prompt 已优化')});
-one('.save').addEventListener('click',e=>{localStorage.setItem('vividlab-prompts',JSON.stringify(spaces.map(x=>x.prompt)));const old=e.currentTarget.textContent;e.currentTarget.textContent='已保存';toast('模板已保存到当前浏览器');setTimeout(()=>e.currentTarget.textContent=old,1500)});
-one('.history-btn').addEventListener('click',()=>toast('当前是模板 v4 · 已保留本地修改'));
-all('.template-bar button').forEach(b=>b.addEventListener('click',()=>toast('已复制为新的本地模板')));
-const templateSelect=one('.template-bar select');templateSelect.addEventListener('change',()=>{const extras={'商品开箱 15s':'重点展示开箱过程、包装细节与第一使用反应。','痛点反转 10s':'前三秒呈现用户痛点，中段使用商品，结尾形成清晰反转。','宠物微剧情':'以宠物的一个小目标组织起承转合，手机随拍风格。','电影感奇观':'使用宏大尺度、体积光与缓慢运镜，保持主体清晰。'};ta.value=extras[templateSelect.value]||spaces[active].prompt;spaces[active].prompt=ta.value;one('.prompt-footer span').textContent=ta.value.length+' 字'});
-const model=one('.settings label:first-child select');model.addEventListener('change',()=>{one('.prompt-tabs span').textContent='已针对 '+model.value+' 优化';toast('已切换到 '+model.value+'（演示模式）')});
-all('.settings select').slice(1).forEach(s=>s.addEventListener('change',()=>toast('生成参数已更新')));
-function showDone(){const stage=one('.preview-stage');stage.className='preview-stage done';stage.innerHTML='<div class="mock-video"><div class="scene-glow"></div><span class="play">▶</span><div class="video-meta"><b>版本 A</b><span>00:10</span></div></div>';one('.results-head span').textContent='2 个版本';const tips=one('.tips');if(tips)tips.remove();let box=one('.feedback-box');if(!box){box=document.createElement('div');box.className='feedback-box';box.innerHTML='<div><strong>这个版本怎么样？</strong><span>反馈会用于优化模板</span></div><div class="feedback-tags">'+['主体不像','商品变形','动作不自然','镜头太静','风格不对','这个很好'].map(x=>'<button>'+x+'</button>').join('')+'</div><button class="iterate">基于反馈再生成 <span>→</span></button>';stage.insertAdjacentElement('afterend',box);all('.feedback-tags button',box).forEach(b=>b.onclick=()=>{b.classList.toggle('selected');feedback=all('.feedback-tags button.selected',box).map(x=>x.textContent)});one('.iterate',box).onclick=()=>runGenerate(true)}const gen=one('.generate');gen.disabled=false;gen.innerHTML='<span>✦</span>再生成 2 个视频版本<small>演示模式 · 不产生费用</small>'}
-function runGenerate(iterate=false){const gen=one('.generate'),stage=one('.preview-stage');gen.disabled=true;gen.innerHTML='<span>◌</span>正在生成预览…<small>演示任务 · 约 2 秒</small>';stage.className='preview-stage queued';stage.innerHTML='<div class="generating"><div class="spinner"></div><strong>模型正在创作</strong><p>'+model.value+' · '+(iterate&&feedback.length?'已采用 '+feedback.join('、'):'已排入生成队列')+'</p><div class="progress"><i></i></div></div>';one('.results-head span').textContent='任务进行中';const old=one('.feedback-box');if(old)old.remove();setTimeout(showDone,1800)}
-one('.generate').addEventListener('click',()=>runGenerate(false));
-one('.new-project').addEventListener('click',()=>{assets.forEach(x=>URL.revokeObjectURL(x.url));assets=[];all('.asset-card').forEach(x=>x.remove());updateCount();spaces.forEach((x,i)=>{if(saved&&saved[i])x.prompt=saved[i]});syncSpace(0);toast('已新建空白创作')});
-one('.top-actions button:first-child').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(location.href);toast('页面链接已复制')}catch(e){toast('链接：'+location.href)}});
-all('.plain-nav').forEach((b,i)=>b.addEventListener('click',()=>toast(['素材库：当前项目 '+assets.length+' 个素材','模板库：12 个演示模板','生成历史：暂无真实任务'][i])));
-syncSpace(active);updateCount();
-})();</script></body></html>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charSet="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>VividLab — AI 视频创作工作台</title>
+<meta name="description" content="用 Reference、Prompt 模板与多模型快速生成并迭代定制视频。"/>
+<meta property="og:title" content="VividLab — AI 视频创作工作台"/>
+<meta property="og:description" content="从 Reference 到成片，一站完成。"/>
+<meta property="og:image" content="http://localhost:3000/og.png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta property="og:image:alt" content="VividLab AI 视频创作工作台"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="VividLab — AI 视频创作工作台"/>
+<meta name="twitter:description" content="从 Reference 到成片，一站完成。"/>
+<meta name="twitter:image" content="http://localhost:3000/og.png"/>
+<link rel="shortcut icon" href="/favicon.svg"/>
+<link rel="icon" href="/favicon.svg"/>
+<style>@layer theme{:root,:host{--font-sans:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";--font-mono:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;--spacing:.25rem;--default-font-family:var(--font-sans);--default-mono-font-family:var(--font-mono)}}@layer base{*,:after,:before,::backdrop{box-sizing:border-box;border:0 solid;margin:0;padding:0}::file-selector-button{box-sizing:border-box;border:0 solid;margin:0;padding:0}html,:host{-webkit-text-size-adjust:100%;tab-size:4;line-height:1.5;font-family:var(--default-font-family,ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji");font-feature-settings:var(--default-font-feature-settings,normal);font-variation-settings:var(--default-font-variation-settings,normal);-webkit-tap-highlight-color:transparent}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;-webkit-text-decoration:inherit;-webkit-text-decoration:inherit;-webkit-text-decoration:inherit;-webkit-text-decoration:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,samp,pre{font-family:var(--default-mono-font-family,ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace);font-feature-settings:var(--default-mono-font-feature-settings,normal);font-variation-settings:var(--default-mono-font-variation-settings,normal);font-size:1em}small{font-size:80%}sub,sup{vertical-align:baseline;font-size:75%;line-height:0;position:relative}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}:-moz-focusring{outline:auto}progress{vertical-align:baseline}summary{display:list-item}ol,ul,menu{list-style:none}img,svg,video,canvas,audio,iframe,embed,object{vertical-align:middle;display:block}img,video{max-width:100%;height:auto}button,input,select,optgroup,textarea{font:inherit;font-feature-settings:inherit;font-variation-settings:inherit;letter-spacing:inherit;color:inherit;opacity:1;background-color:#0000;border-radius:0}::file-selector-button{font:inherit;font-feature-settings:inherit;font-variation-settings:inherit;letter-spacing:inherit;color:inherit;opacity:1;background-color:#0000;border-radius:0}:where(select:is([multiple],[size])) optgroup{font-weight:bolder}:where(select:is([multiple],[size])) optgroup option{padding-inline-start:20px}::file-selector-button{margin-inline-end:4px}::placeholder{opacity:1}@supports (not ((-webkit-appearance:-apple-pay-button))) or (contain-intrinsic-size:1px){::placeholder{color:currentColor}@supports (color:color-mix(in lab, red, red)){::placeholder{color:color-mix(in oklab, currentcolor 50%, transparent)}}}textarea{resize:vertical}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-date-and-time-value{min-height:1lh;text-align:inherit}::-webkit-datetime-edit{display:inline-flex}::-webkit-datetime-edit-fields-wrapper{padding:0}::-webkit-datetime-edit{padding-block:0}::-webkit-datetime-edit-year-field{padding-block:0}::-webkit-datetime-edit-month-field{padding-block:0}::-webkit-datetime-edit-day-field{padding-block:0}::-webkit-datetime-edit-hour-field{padding-block:0}::-webkit-datetime-edit-minute-field{padding-block:0}::-webkit-datetime-edit-second-field{padding-block:0}::-webkit-datetime-edit-millisecond-field{padding-block:0}::-webkit-datetime-edit-meridiem-field{padding-block:0}::-webkit-calendar-picker-indicator{line-height:1}:-moz-ui-invalid{box-shadow:none}button,input:where([type=button],[type=reset],[type=submit]){appearance:button}::file-selector-button{appearance:button}::-webkit-inner-spin-button{height:auto}::-webkit-outer-spin-button{height:auto}[hidden]:where(:not([hidden=until-found])){display:none!important}}@layer components;@layer utilities{.relative{position:relative}.start{inset-inline-start:var(--spacing)}.table{display:table}}:root{--ink:#171818;--muted:#777974;--line:#e7e8e3;--paper:#f6f6f2;--card:#fff}*{box-sizing:border-box}html,body{background:var(--paper);min-height:100%;color:var(--ink);margin:0}body{font-family:Arial,PingFang SC,Microsoft YaHei,sans-serif}button,input,textarea,select{font:inherit}button{color:inherit}.app-shell{background:#f7f7f3;min-height:100vh;display:flex}.sidebar{color:#f6f7f3;z-index:5;background:#191b1a;flex-direction:column;width:244px;padding:22px 14px 14px;display:flex;position:fixed;inset:0 auto 0 0}.brand{letter-spacing:-.3px;align-items:center;gap:10px;padding:0 8px 22px;font-size:18px;font-weight:750;display:flex}.brand-mark{color:#171818;background:#c8ff59;border-radius:8px;place-items:center;width:28px;height:28px;font-size:15px;font-weight:900;display:grid;transform:rotate(-4deg)}.brand em{color:#9ea19c;text-transform:uppercase;letter-spacing:1px;border:1px solid #424541;border-radius:5px;padding:3px 6px;font-size:8px;font-style:normal}.new-project{color:#151714;cursor:pointer;background:#c8ff59;border:0;border-radius:9px;justify-content:center;align-items:center;gap:8px;width:100%;padding:11px;font-weight:750;display:flex}.new-project span{font-size:20px;font-weight:400;line-height:14px}.side-label{color:#70736f;letter-spacing:1.4px;text-transform:uppercase;padding:25px 10px 9px;font-size:10px;font-weight:700}.workspace-list{flex-direction:column;gap:3px;display:flex}.workspace{color:#b8bbb5;text-align:left;cursor:pointer;background:0 0;border:0;border-radius:9px;grid-template-columns:32px 1fr;gap:8px;width:100%;padding:10px 9px;display:grid;position:relative}.workspace:hover{background:#232624}.workspace.active{color:#fff;background:#2a2d2a}.workspace-icon{background:#353834;border-radius:7px;place-items:center;width:28px;height:28px;font-weight:900;display:grid}.workspace strong,.workspace small{display:block}.workspace strong{margin:1px 0 4px;font-size:12px}.workspace small{color:#777b75;font-size:9px}.workspace.active small{color:#9b9f98}.workspace i{background:var(--accent);border-radius:2px;width:2px;height:20px;position:absolute;top:15px;right:0}.library-label{padding-top:22px}.plain-nav{color:#a9aca6;text-align:left;cursor:pointer;background:0 0;border:0;align-items:center;gap:10px;width:100%;padding:9px 11px;font-size:11px;display:flex}.plain-nav span{color:#70736f;width:16px;font-size:15px}.plain-nav b{color:#858983;background:#2b2e2b;border-radius:8px;margin-left:auto;padding:2px 6px;font-size:8px}.sidebar-bottom{margin-top:auto}.credits{color:#9b9e98;border:1px solid #323532;border-radius:10px;margin:0 6px 14px;padding:12px;font-size:9px}.credits strong{float:right;color:#cdd0ca}.credits>div{background:#353835;border-radius:3px;height:3px;margin:10px 0 7px;overflow:hidden}.credits>div i{background:#c8ff59;width:68%;height:100%;display:block}.credits small{color:#686b67}.profile{color:#e8eae5;text-align:left;background:0 0;border:0;border-top:1px solid #2d302d;grid-template-columns:32px 1fr auto;align-items:center;gap:9px;width:100%;padding:10px 8px;display:grid}.profile>span:first-child{background:#383b37;border-radius:50%;place-items:center;width:30px;height:30px;font-size:9px;display:grid}.profile strong,.profile small{display:block}.profile strong{margin-bottom:3px;font-size:10px}.profile small{color:#6f726d;font-size:8px}.profile b{color:#60635f;font-size:9px}.workspace-main{width:calc(100% - 244px);margin-left:244px}.topbar{border-bottom:1px solid var(--line);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);z-index:4;background:#ffffffd1;justify-content:space-between;align-items:center;height:66px;padding:0 26px;display:flex;position:sticky;top:0}.topbar>div:first-child{font-size:12px}.crumb{color:#9a9c97}.draft{color:#8a8d87;background:#eeefeb;border-radius:5px;margin-left:9px;padding:3px 7px;font-size:8px}.top-actions{gap:8px;display:flex}.top-actions button{cursor:pointer;background:#fff;border:1px solid #dedfd9;border-radius:7px;padding:8px 14px;font-size:10px}.top-actions .save{color:#fff;background:#1e201f;border-color:#1e201f;min-width:83px}.studio-grid{grid-template-columns:minmax(580px,1fr) 390px;max-width:1260px;min-height:calc(100vh - 66px);margin:0 auto;display:grid}.composer{border-right:1px solid var(--line);background:#fff;padding:30px 36px 70px}.section-heading{justify-content:space-between;align-items:flex-end;margin-bottom:14px;display:flex}.section-heading>div{align-items:center;gap:10px;display:flex}.section-heading span{color:#777a74;background:#f0f1ed;border-radius:50%;place-items:center;width:22px;height:22px;font-size:8px;font-weight:800;display:grid}.section-heading h2{letter-spacing:-.15px;margin:0;font-size:14px}.section-heading p{color:#a1a39e;margin:0;font-size:9px}.asset-row{gap:10px;min-height:107px;display:flex}.asset-card,.upload-card{border-radius:9px;width:132px;height:104px;position:relative;overflow:hidden}.asset-card{background:#e8e9e4}.asset-card img{object-fit:cover;width:100%;height:100%}.video-placeholder{color:#fff;background:linear-gradient(145deg,#333,#aaa);place-items:center;height:100%;display:grid}.asset-card>span{color:#fff;background:#0f100fb3;border-radius:5px;padding:3px 6px;font-size:8px;position:absolute;bottom:7px;left:7px}.asset-card>button{color:#fff;cursor:pointer;background:#00000080;border:0;border-radius:50%;place-items:center;width:19px;height:19px;display:grid;position:absolute;top:6px;right:6px}.upload-card{color:#91938d;cursor:pointer;background:#fafaf8;border:1px dashed #d4d6cf;flex-direction:column;justify-content:center;align-items:center;display:flex}.upload-card:hover{border-color:var(--accent);background:#fff}.upload-card input{display:none}.upload-card b{color:#7d807a;font-size:21px;font-weight:300}.upload-card strong{color:#5e615c;margin:5px 0 4px;font-size:9px}.upload-card small{font-size:7px}.prompt-heading{margin-top:30px}.history-btn{color:#777a74;cursor:pointer;background:0 0;border:0;font-size:9px}.template-bar{border:1px solid var(--line);background:#f8f8f5;border-bottom:0;border-radius:9px 9px 0 0;align-items:center;height:42px;padding:0 11px;display:flex}.template-bar label{color:#8d8f89;font-size:9px}.template-bar select{color:#292b29;background:0 0;border:0;outline:0;margin-left:10px;font-size:10px;font-weight:700}.template-bar>span{color:#949690;background:#ebece7;border-radius:4px;margin-left:7px;padding:2px 5px;font-size:7px}.template-bar button{color:#71746e;cursor:pointer;background:0 0;border:0;margin-left:auto;font-size:8px}.prompt-editor{border:1px solid var(--line);background:#fff;border-radius:0 0 9px 9px}.prompt-tabs{border-bottom:1px solid #eff0ec;align-items:center;height:35px;padding:0 11px;display:flex}.prompt-tabs button{color:#969993;cursor:pointer;background:0 0;border:0;border-bottom:2px solid #0000;height:100%;padding:0 10px;font-size:8px}.prompt-tabs button.active{border-color:var(--accent);color:#252724;font-weight:700}.prompt-tabs span{color:#9a9d96;background:0 0;width:auto;height:auto;margin-left:auto;font-size:7px}.prompt-editor textarea{resize:vertical;color:#343633;border:0;outline:0;width:100%;min-height:132px;padding:15px 17px;font-size:11px;line-height:1.9;display:block}.prompt-footer{color:#aaada6;border-top:1px solid #f0f1ed;justify-content:space-between;align-items:center;padding:7px 11px;font-size:8px;display:flex}.prompt-footer button{color:#667848;cursor:pointer;background:#f0f5e6;border:0;border-radius:5px;padding:5px 9px;font-size:8px;font-weight:700}.negative{border:1px solid var(--line);border-radius:8px;grid-template-columns:98px 1fr;align-items:center;gap:8px;margin-top:9px;padding:8px 11px;display:grid}.negative label{font-size:9px;font-weight:700}.negative label span{color:#a7aaa3;font-size:7px;font-weight:400}.negative input{color:#777a74;border:0;outline:0;width:100%;font-size:9px}.settings-heading{margin-top:28px}.settings{grid-template-columns:repeat(4,1fr);gap:8px;display:grid}.settings label{color:#8e918a;font-size:8px}.settings select{border:1px solid var(--line);color:#343633;background:#fff;border-radius:7px;outline:0;width:100%;margin-top:6px;padding:9px;font-size:9px;display:block}.generate{color:#fff;cursor:pointer;background:#1d1f1e;border:0;border-radius:9px;grid-template-columns:auto auto 1fr;justify-content:center;align-items:center;gap:7px;width:100%;margin-top:18px;padding:13px 16px;font-size:11px;font-weight:750;display:grid}.generate span{color:#c8ff59}.generate small{color:#8c9089;justify-self:end;font-size:8px;font-weight:400}.generate:disabled{opacity:.75;cursor:wait}.results-panel{background:#f7f7f3;padding:29px 25px}.results-head{justify-content:space-between;align-items:center;margin-bottom:14px;display:flex}.results-head>div{align-items:center;gap:8px;display:flex}.results-head h2{margin:0;font-size:14px}.results-head span{color:#858881;background:#e9eae5;border-radius:5px;padding:3px 6px;font-size:7px}.results-head button{color:#898c85;background:0 0;border:0}.preview-stage{background:#eeefeb;border:1px solid #e0e1dc;border-radius:11px;place-items:center;height:425px;display:grid;overflow:hidden}.empty-result,.generating{text-align:center;color:#8d9089;flex-direction:column;align-items:center;display:flex}.empty-result>div{color:#b1b3ad;background:#f7f7f4;border:1px solid #d3d5cf;border-radius:50%;place-items:center;width:49px;height:49px;margin-bottom:16px;font-size:12px;display:grid}.empty-result strong,.generating strong{color:#61645e;font-size:10px}.empty-result p,.generating p{color:#a0a39c;width:190px;margin:7px 0;font-size:8px;line-height:1.6}.spinner{border:2px solid #d7d9d2;border-top-color:var(--accent);border-radius:50%;width:38px;height:38px;margin-bottom:16px;animation:.8s linear infinite spin}.progress{background:#dddfd9;border-radius:4px;width:170px;height:3px;margin-top:13px;overflow:hidden}.progress i{background:var(--accent);width:65%;height:100%;animation:1.2s ease-in-out infinite pulse;display:block}.mock-video{background:radial-gradient(circle at 45% 32%,#ffd8a3 0 8%,#0000 25%),linear-gradient(155deg,#303c31 0 30%,#baa06e 55%,#1c2420 100%);width:100%;height:100%;position:relative}.scene-glow{opacity:.85;background:linear-gradient(145deg,#f8a83d,#e04725);border-radius:40% 40% 22% 22%;position:absolute;inset:18% 22%;box-shadow:0 20px 80px #0006}.play{color:#222;background:#ffffffe6;border-radius:50%;place-items:center;width:48px;height:48px;display:grid;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}.video-meta{color:#fff;text-shadow:0 1px 5px #000;justify-content:space-between;font-size:9px;display:flex;position:absolute;inset:auto 12px 12px}.tips,.feedback-box{background:#fff;border:1px solid #e5e6e0;border-radius:10px;margin-top:14px;padding:15px}.tips strong{font-size:9px}.tips strong span{color:#7a9d3a}.tips ul{color:#858881;margin:11px 0 0;padding-left:16px;font-size:8px;line-height:1.8}.feedback-box>div:first-child{justify-content:space-between;display:flex}.feedback-box strong{font-size:9px}.feedback-box>div:first-child span{color:#9b9e97;font-size:7px}.feedback-tags{flex-wrap:wrap;gap:5px;margin:11px 0;display:flex}.feedback-tags button{color:#73766f;cursor:pointer;background:#fafaf8;border:1px solid #e2e3de;border-radius:6px;padding:5px 7px;font-size:7px}.feedback-tags button.selected{border-color:var(--accent);color:#252724;background:#fff}.iterate{cursor:pointer;background:0 0;border:0;border-top:1px solid #ecede8;justify-content:space-between;width:100%;padding:8px 0 0;font-size:8px;font-weight:700;display:flex}.model-status{color:#8c8f88;justify-content:space-between;margin-top:14px;font-size:8px;display:flex}.model-status i{background:#f1ac45;border-radius:50%;width:6px;height:6px;margin-right:5px;display:inline-block}.model-status b{font-weight:500}@keyframes spin{to{transform:rotate(360deg)}}@keyframes pulse{50%{opacity:.5}}@media (max-width:1050px){.studio-grid{grid-template-columns:1fr}.results-panel{border-top:1px solid var(--line)}.preview-stage{height:360px}.composer{border-right:0}}@media (max-width:720px){.sidebar{width:74px;padding:18px 10px;position:static}.brand>span:not(.brand-mark),.brand em,.new-project:not(span),.side-label,.workspace span:not(.workspace-icon),.plain-nav:not(span),.sidebar-bottom{display:none}.brand{padding:0 12px 20px}.new-project{width:46px;height:42px;font-size:0}.new-project span{font-size:22px}.workspace{padding:8px;display:block}.workspace-icon{width:38px;height:38px}.workspace i{display:none}.workspace-main{width:calc(100% - 74px);margin-left:0}.topbar{padding:0 15px}.composer,.results-panel{padding:24px 18px 50px}.section-heading p{display:none}.asset-row{flex-wrap:wrap}.settings{grid-template-columns:1fr 1fr}.generate{grid-template-columns:auto 1fr}.generate small{grid-column:1/-1;justify-self:center}.studio-grid{min-width:0}}
+</style>
+</head>
+<body>
+<div hidden="">
+<!--$-->
+<!--/$-->
+</div>
+<main class="app-shell" style="--accent:#ff6b35">
+<aside class="sidebar">
+<div class="brand">
+<span class="brand-mark">V</span>
+<span>VividLab</span>
+<em>Beta</em>
+</div>
+<button class="new-project">
+<span>＋</span> 新建创作</button>
+<div class="side-label">创作空间</div>
+<nav class="workspace-list" aria-label="创作空间">
+<button class="workspace active">
+<span class="workspace-icon" style="color:#ff6b35">↗</span>
+<span>
+<strong>抖音带货</strong>
+<small>商品展示 · 口播转化</small>
+</span>
+<i>
+</i>
+</button>
+<button class="workspace">
+<span class="workspace-icon" style="color:#9875ff">●</span>
+<span>
+<strong>宠物日常</strong>
+<small>角色一致 · 轻松叙事</small>
+</span>
+</button>
+<button class="workspace">
+<span class="workspace-icon" style="color:#00a67e">✦</span>
+<span>
+<strong>创意实验室</strong>
+<small>风格探索 · 多模型对比</small>
+</span>
+</button>
+</nav>
+<div class="side-label library-label">资产库</div>
+<button class="plain-nav">
+<span>▧</span> Reference 素材 <b>0</b>
+</button>
+<button class="plain-nav">
+<span>≡</span> Prompt 模板 <b>12</b>
+</button>
+<button class="plain-nav">
+<span>◴</span> 生成历史</button>
+<div class="sidebar-bottom">
+<div class="credits">
+<span>本月额度</span>
+<strong>68%</strong>
+<div>
+<i>
+</i>
+</div>
+<small>¥136 / ¥200</small>
+</div>
+<button class="profile">
+<span>MX</span>
+<span>
+<strong>我的工作台</strong>
+<small>个人空间</small>
+</span>
+<b>•••</b>
+</button>
+</div>
+</aside>
+<section class="workspace-main">
+<header class="topbar">
+<div>
+<span class="crumb">创作空间 / </span>
+<strong>抖音带货</strong>
+<span class="draft">草稿</span>
+</div>
+<div class="top-actions">
+<button>分享</button>
+<button class="save">保存模板</button>
+</div>
+</header>
+<div class="studio-grid">
+<section class="composer">
+<div class="section-heading">
+<div>
+<span>01</span>
+<h2>准备 Reference</h2>
+</div>
+<p>上传主体、商品或风格参考，最多 4 个素材</p>
+</div>
+<div class="asset-row">
+<label class="upload-card">
+<input type="file" accept="image/jpeg,image/png,image/webp" multiple=""/>
+<b>＋</b>
+<strong>添加参考图</strong>
+<small>JPG / PNG / WebP · 自动压缩</small>
+</label>
+</div>
+<div class="section-heading prompt-heading">
+<div>
+<span>02</span>
+<h2>编排 Prompt</h2>
+</div>
+<button class="history-btn">↺ 查看版本</button>
+</div>
+<div class="template-bar">
+<label>模板<select>
+<option selected="">商品开箱 15s</option>
+<option>痛点反转 10s</option>
+<option>宠物微剧情</option>
+<option>电影感奇观</option>
+</select>
+</label>
+<span>v3</span>
+<button>复制为新模板</button>
+</div>
+<div class="prompt-editor">
+<div class="prompt-tabs">
+<button class="active">自然语言</button>
+<button>结构化</button>
+<span>已针对 <!-- -->Seedance 2.0<!-- --> 优化</span>
+</div>
+<textarea aria-label="视频生成提示词">一支适合抖音信息流的 9:16 商品短片。前三秒用近距离动态镜头建立吸引力，保持商品包装、文字和颜色准确。镜头自然、有真实手持感，结尾留出行动号召空间。</textarea>
+<div class="prompt-footer">
+<span>76<!-- --> 字</span>
+<button>✦ AI 优化</button>
+</div>
+</div>
+<div class="negative">
+<label>负面约束 <span>可选</span>
+</label>
+<input value="文字变形、水印、多余肢体、过度磨皮、画面闪烁"/>
+</div>
+<div class="section-heading settings-heading">
+<div>
+<span>03</span>
+<h2>生成设置</h2>
+</div>
+</div>
+<div class="settings">
+<label>生成模型<select>
+<option selected="">Seedance 2.0</option>
+<option>Gemini Omni</option>
+<option>Veo 3.1</option>
+</select>
+</label>
+<label>画面比例<select>
+<option>9:16 竖屏</option>
+<option>16:9 横屏</option>
+<option>1:1 方形</option>
+</select>
+</label>
+<label>时长<select>
+<option>10 秒</option>
+<option>5 秒</option>
+<option selected="">15 秒</option>
+</select>
+</label>
+<label>生成数量<select>
+<option selected="">1 个版本</option>
+</select>
+</label>
+</div>
+<button class="generate">
+<span>✦</span>生成第一个视频<small>真实调用 · 将消耗火山方舟额度</small>
+</button>
+</section>
+<aside class="results-panel">
+<div class="results-head">
+<div>
+<h2>生成结果</h2>
+<span>等待生成</span>
+</div>
+<button>•••</button>
+</div>
+<div class="preview-stage idle">
+<div class="empty-result">
+<div>▶</div>
+<strong>你的作品会出现在这里</strong>
+<p>配置左侧素材和 Prompt，开始第一次生成</p>
+</div>
+</div>
+<div class="tips">
+<strong>
+<span>✦</span> 本次创作建议</strong>
+<ul>
+<li>商品 reference 建议使用纯色背景、多角度照片</li>
+<li>前三秒明确主体动作，更适合抖音信息流</li>
+<li>生成后可标记问题，系统会形成新的模板版本</li>
+</ul>
+</div>
+<div class="model-status">
+<span>
+<i>
+</i> API 接入状态</span>
+<b>Seedance 2.0 已连接</b>
+</div>
+</aside>
+</div>
+</section>
+</main>
+<!--$-->
+<!--/$-->
+<script>
+(function () {
+  const API_BASE = 'https://vividlab-demo.vercel.app/api';
+  const spaces = [
+    { title: '抖音带货', accent: '#ff6b35', prompt: '@图片1中的袜子商品，生成一段 15 秒、9:16 竖屏的抖音带货短视频。0–3 秒用强吸引力的生活化冲突开场：一位年轻人准备出门运动，朋友发现袜子既可爱又有活力，自然发问。3–8 秒通过两人轻松对话展示商品卖点：贴合、舒适、运动时不易滑落，并用近景清楚展示袜子的真实颜色、图案、材质和弹性。8–12 秒加入跑跳、穿鞋、街头运动等可爱活泼动作，镜头节奏明快但主体稳定。12–15 秒给袜子商品特写和自然行动号召。全程保持参考图中商品外观一致，不添加无法从素材确认的正品、品牌授权或功效承诺，不出现其他品牌，不生成变形文字。使用自然中文女声对话、轻快音乐和清晰环境音。', tip: '商品 reference 建议使用纯色背景、多角度照片' },
+    { title: '宠物日常', accent: '#9875ff', prompt: '以 reference 中的宠物为唯一主角，完整保留毛色、脸部花纹、体型和眼睛颜色。日常手机随拍质感，动作自然可爱，光线柔和，不改变宠物身份特征。', tip: '准备正面、侧面和全身照片有助于保持宠物一致性' },
+    { title: '创意实验室', accent: '#00a67e', prompt: '创作一段具有电影感的视觉短片，主体清晰，动作符合物理规律。使用富有表现力的镜头运动和层次丰富的环境声，避免廉价的特效感和无意义的快速切镜。', tip: '使用首尾帧和风格 reference 可以获得更稳定的创意结果' }
+  ];
+  const one = (selector, root = document) => root.querySelector(selector);
+  const all = (selector, root = document) => [...root.querySelectorAll(selector)];
+  let active = Number(localStorage.getItem('vividlab-space') || 0);
+  let assets = [];
+  let feedback = [];
+  const saved = JSON.parse(localStorage.getItem('vividlab-prompts') || 'null');
+  if (saved) spaces.forEach((space, index) => { if (saved[index]) space.prompt = saved[index]; });
+
+  function toast(message) {
+    let el = one('.vivid-toast');
+    if (!el) {
+      el = document.createElement('div');
+      el.className = 'vivid-toast';
+      el.style.cssText = 'position:fixed;right:24px;bottom:24px;background:#191b1a;color:#fff;padding:11px 15px;border-radius:8px;font:12px Arial;z-index:99;box-shadow:0 10px 35px #0003;max-width:360px';
+      document.body.appendChild(el);
+    }
+    el.textContent = message;
+    el.style.display = 'block';
+    clearTimeout(el._timer);
+    el._timer = setTimeout(() => { el.style.display = 'none'; }, 3500);
+  }
+
+  function readFile(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = () => reject(new Error('读取图片失败'));
+      reader.readAsDataURL(file);
+    });
+  }
+
+  async function prepareImage(file) {
+    if (!file || !file.type.startsWith('image/')) throw new Error('请先上传一张 JPG、PNG 或 WebP 图片');
+    if (file.size <= 3.7 * 1024 * 1024 && /^image\/(jpeg|png|webp)$/.test(file.type)) return readFile(file);
+    const bitmap = await createImageBitmap(file);
+    const scale = Math.min(1, 2048 / Math.max(bitmap.width, bitmap.height));
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.max(1, Math.round(bitmap.width * scale));
+    canvas.height = Math.max(1, Math.round(bitmap.height * scale));
+    canvas.getContext('2d').drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+    bitmap.close();
+    let quality = 0.86;
+    let blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', quality));
+    while (blob && blob.size > 3.7 * 1024 * 1024 && quality > 0.55) {
+      quality -= 0.1;
+      blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', quality));
+    }
+    if (!blob || blob.size > 4 * 1024 * 1024) throw new Error('图片仍然过大，请换一张更小的图片');
+    return readFile(blob);
+  }
+
+  function findVideoUrl(value) {
+    if (typeof value === 'string' && /^https?:\/\//.test(value) && /\.(mp4|mov|webm)(\?|$)/i.test(value)) return value;
+    if (value && typeof value === 'object') {
+      for (const child of Object.values(value)) {
+        const found = findVideoUrl(child);
+        if (found) return found;
+      }
+    }
+    return '';
+  }
+
+  function taskState(data) {
+    return String(data?.status || data?.state || data?.task_status || '').toLowerCase();
+  }
+
+  function apiError(data, fallback) {
+    return data?.error?.message || data?.error || data?.message || fallback;
+  }
+
+  function setGenerateReady(label = '生成第一个视频') {
+    const button = one('.generate');
+    button.disabled = false;
+    button.innerHTML = '<span>✦</span>' + label + '<small>真实调用 · 将消耗火山方舟额度</small>';
+  }
+
+  function resetResult() {
+    const stage = one('.preview-stage');
+    stage.className = 'preview-stage idle';
+    stage.innerHTML = '<div class="empty-result"><div>▶</div><strong>你的作品会出现在这里</strong><p>上传参考图并检查 Prompt，开始第一次生成</p></div>';
+    one('.results-head span').textContent = '等待生成';
+    one('.feedback-box')?.remove();
+    setGenerateReady();
+  }
+
+  function syncSpace(index) {
+    active = index;
+    localStorage.setItem('vividlab-space', index);
+    all('.workspace').forEach((button, itemIndex) => button.classList.toggle('active', itemIndex === index));
+    document.documentElement.style.setProperty('--accent', spaces[index].accent);
+    one('.app-shell').style.setProperty('--accent', spaces[index].accent);
+    one('.topbar strong').textContent = spaces[index].title;
+    one('.prompt-editor textarea').value = spaces[index].prompt;
+    one('.prompt-footer span').textContent = spaces[index].prompt.length + ' 字';
+    const firstTip = one('.tips li');
+    if (firstTip) firstTip.textContent = spaces[index].tip;
+    resetResult();
+  }
+
+  all('.workspace').forEach((button, index) => button.addEventListener('click', () => syncSpace(index)));
+  const input = one('.upload-card input');
+  const row = one('.asset-row');
+  const upload = one('.upload-card');
+
+  function updateCount() {
+    const count = all('.plain-nav b')[0];
+    if (count) count.textContent = assets.length;
+    upload.style.display = assets.length >= 4 ? 'none' : 'flex';
+  }
+
+  function addAsset(file) {
+    const url = URL.createObjectURL(file);
+    assets.push({ file, url });
+    const card = document.createElement('div');
+    card.className = 'asset-card';
+    const image = document.createElement('img');
+    image.src = url;
+    image.alt = file.name;
+    card.appendChild(image);
+    const tag = document.createElement('span');
+    tag.textContent = assets.length === 1 ? '图片1 · 主体' : '参考';
+    card.appendChild(tag);
+    const remove = document.createElement('button');
+    remove.type = 'button';
+    remove.textContent = '×';
+    remove.setAttribute('aria-label', '删除 ' + file.name);
+    remove.onclick = () => {
+      URL.revokeObjectURL(url);
+      assets = assets.filter(item => item.url !== url);
+      card.remove();
+      updateCount();
+      toast('素材已移除');
+    };
+    card.appendChild(remove);
+    row.insertBefore(card, upload);
+  }
+
+  input.addEventListener('change', event => {
+    const files = [...event.target.files].slice(0, 4 - assets.length);
+    files.forEach(addAsset);
+    updateCount();
+    input.value = '';
+    if (files.length) toast('已添加 ' + files.length + ' 张参考图，生成时使用图片1');
+  });
+
+  const textarea = one('.prompt-editor textarea');
+  textarea.addEventListener('input', () => {
+    spaces[active].prompt = textarea.value;
+    one('.prompt-footer span').textContent = textarea.value.length + ' 字';
+  });
+
+  one('.prompt-footer button').addEventListener('click', () => {
+    const extra = active === 0 ? ' 镜头节奏清晰，优先保证商品图案、颜色和形态稳定。' : active === 1 ? ' 保持同一只宠物身份一致，避免毛色、五官和体型漂移。' : ' 镜头运动由慢到快，确保每个视觉转折都有清晰动机。';
+    if (!textarea.value.includes(extra.trim())) textarea.value += extra;
+    spaces[active].prompt = textarea.value;
+    one('.prompt-footer span').textContent = textarea.value.length + ' 字';
+    toast('Prompt 已优化');
+  });
+
+  one('.save').addEventListener('click', event => {
+    localStorage.setItem('vividlab-prompts', JSON.stringify(spaces.map(space => space.prompt)));
+    const old = event.currentTarget.textContent;
+    event.currentTarget.textContent = '已保存';
+    toast('模板已保存到当前浏览器');
+    setTimeout(() => { event.currentTarget.textContent = old; }, 1500);
+  });
+
+  one('.history-btn').addEventListener('click', () => toast('当前是模板 v4 · 已保留本地修改'));
+  one('.template-bar button').addEventListener('click', () => toast('已复制为新的本地模板'));
+  const templateSelect = one('.template-bar select');
+  templateSelect.addEventListener('change', () => {
+    const templates = {
+      '商品开箱 15s': spaces[0].prompt,
+      '痛点反转 10s': '前三秒呈现用户痛点，中段使用商品，结尾形成清晰反转。',
+      '宠物微剧情': '以宠物的一个小目标组织起承转合，手机随拍风格。',
+      '电影感奇观': '使用宏大尺度、体积光与缓慢运镜，保持主体清晰。'
+    };
+    textarea.value = templates[templateSelect.value] || spaces[active].prompt;
+    spaces[active].prompt = textarea.value;
+    one('.prompt-footer span').textContent = textarea.value.length + ' 字';
+  });
+
+  const model = one('.settings label:first-child select');
+  model.addEventListener('change', () => {
+    one('.prompt-tabs span').textContent = '已针对 ' + model.value + ' 优化';
+    toast(model.value === 'Seedance 2.0' ? 'Seedance 2.0 已连接' : model.value + ' 尚未接入 API');
+  });
+  all('.settings select').slice(1).forEach(select => select.addEventListener('change', () => toast('生成参数已更新')));
+
+  function showVideo(url) {
+    const stage = one('.preview-stage');
+    stage.className = 'preview-stage done';
+    stage.innerHTML = '<video controls playsinline style="width:100%;height:100%;object-fit:contain;background:#111" src="' + url.replace(/"/g, '&quot;') + '"></video>';
+    one('.results-head span').textContent = '生成完成';
+    let box = one('.feedback-box');
+    if (!box) {
+      box = document.createElement('div');
+      box.className = 'feedback-box';
+      box.innerHTML = '<div><strong>这个版本怎么样？</strong><span>反馈会写入下一次 Prompt</span></div><div class="feedback-tags">' + ['主体不像', '商品变形', '动作不自然', '镜头太静', '风格不对', '这个很好'].map(item => '<button>' + item + '</button>').join('') + '</div><button class="iterate">基于反馈再生成 <span>→</span></button>';
+      stage.insertAdjacentElement('afterend', box);
+      all('.feedback-tags button', box).forEach(button => {
+        button.onclick = () => {
+          button.classList.toggle('selected');
+          feedback = all('.feedback-tags button.selected', box).map(item => item.textContent);
+        };
+      });
+      one('.iterate', box).onclick = () => runGenerate(true);
+    }
+    setGenerateReady('再生成 1 个视频');
+  }
+
+  async function pollTask(taskId) {
+    const deadline = Date.now() + 12 * 60 * 1000;
+    while (Date.now() < deadline) {
+      await new Promise(resolve => setTimeout(resolve, 6000));
+      const response = await fetch(API_BASE + '/task?id=' + encodeURIComponent(taskId));
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(apiError(data, '查询生成任务失败'));
+      const videoUrl = findVideoUrl(data);
+      if (videoUrl) return videoUrl;
+      const state = taskState(data);
+      if (['failed', 'error', 'cancelled', 'canceled'].includes(state)) throw new Error(apiError(data, 'Seedance 生成失败'));
+      one('.results-head span').textContent = state === 'queued' ? '排队中' : '生成中';
+    }
+    throw new Error('生成仍在进行，请稍后再试；任务不会被取消');
+  }
+
+  async function runGenerate(iterate = false) {
+    const button = one('.generate');
+    const stage = one('.preview-stage');
+    try {
+      if (model.value !== 'Seedance 2.0') throw new Error('目前只接入了 Seedance 2.0，请先切回该模型');
+      if (!assets[0]) throw new Error('请先上传袜子商品参考图');
+      if (textarea.value.trim().length < 10) throw new Error('Prompt 至少需要 10 个字');
+      button.disabled = true;
+      button.innerHTML = '<span>◌</span>正在提交任务…<small>请不要关闭页面</small>';
+      stage.className = 'preview-stage queued';
+      stage.innerHTML = '<div class="generating"><div class="spinner"></div><strong>正在准备参考图</strong><p>图片只会上传到本项目的 Vercel Blob</p><div class="progress"><i></i></div></div>';
+      one('.results-head span').textContent = '正在提交';
+      one('.feedback-box')?.remove();
+      const imageDataUrl = await prepareImage(assets[0].file);
+      const ratio = one('.settings label:nth-child(2) select').value.split(' ')[0];
+      const duration = parseInt(one('.settings label:nth-child(3) select').value, 10);
+      const negative = one('.negative input').value.trim();
+      const feedbackText = iterate && feedback.length ? ' 根据上个版本反馈修正：' + feedback.join('、') + '。' : '';
+      const prompt = textarea.value.trim() + (negative ? ' 负面约束：' + negative + '。' : '') + feedbackText;
+      const response = await fetch(API_BASE + '/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt, imageDataUrl, ratio, duration })
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(apiError(data, '提交 Seedance 任务失败'));
+      const taskId = data.id || data.task_id || data.data?.id || data.data?.task_id;
+      if (!taskId) throw new Error('接口已响应，但没有返回任务 ID');
+      stage.innerHTML = '<div class="generating"><div class="spinner"></div><strong>Seedance 正在创作</strong><p>任务 ' + String(taskId).slice(0, 12) + '… · 通常需要数分钟</p><div class="progress"><i></i></div></div>';
+      one('.results-head span').textContent = '任务进行中';
+      button.innerHTML = '<span>◌</span>视频生成中…<small>正在自动查询进度</small>';
+      const videoUrl = await pollTask(taskId);
+      showVideo(videoUrl);
+      toast('视频生成完成');
+    } catch (error) {
+      stage.className = 'preview-stage idle';
+      stage.innerHTML = '<div class="empty-result"><div>!</div><strong>本次没有生成视频</strong><p>' + String(error.message || error).replace(/[<>&]/g, '') + '</p></div>';
+      one('.results-head span').textContent = '需要处理';
+      setGenerateReady('重新尝试');
+      toast(error.message || '生成失败');
+    }
+  }
+
+  one('.generate').addEventListener('click', () => runGenerate(false));
+  one('.new-project').addEventListener('click', () => {
+    assets.forEach(item => URL.revokeObjectURL(item.url));
+    assets = [];
+    all('.asset-card').forEach(card => card.remove());
+    updateCount();
+    syncSpace(0);
+    toast('已新建空白创作');
+  });
+  one('.top-actions button:first-child').addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(location.href); toast('页面链接已复制'); }
+    catch { toast('链接：' + location.href); }
+  });
+  all('.plain-nav').forEach((button, index) => button.addEventListener('click', () => toast(['素材库：当前项目 ' + assets.length + ' 个素材', '模板库：12 个演示模板', '生成历史：本机暂未保存历史'][index])));
+  syncSpace(Math.min(2, Math.max(0, active)));
+  updateCount();
+})();
+</script>
+</body>
+</html>
